@@ -13,7 +13,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/get', async function (req, res, next) {
+app.get('/fff/get', async function (req, res, next) {
     var parsed = await csv().fromStream(request.get('http://fridaysforfuture.de/map/mapdata-29.csv'));
     res.status(200).send({
         success: 'true',
