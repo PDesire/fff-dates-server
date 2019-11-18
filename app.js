@@ -14,7 +14,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/fff/v1/get', async function (req, res, next) {
-    var parsed = await csv().fromStream(request.get('http://fridaysforfuture.de/map/mapdata-29.csv'));
+    var parsed = await csv().fromStream(request.get('https://fridaysforfuture.de/map/mapdata.csv'));
 
     for (var a = 0; a < parsed.length; a++) {
         if (parsed[a]['Instagram'] != "") parsed[a]['Instagram'] = normalizeURLs(parsed[a]['Instagram']);
@@ -30,7 +30,7 @@ app.get('/fff/v1/get', async function (req, res, next) {
 });
 
 app.get('/fff/v2/get', async function (req, res, next) {
-    var parsed = await csv().fromStream(request.get('http://fridaysforfuture.de/map/mapdata-29.csv'));
+    var parsed = await csv().fromStream(request.get('http://fridaysforfuture.de/map/mapdata.csv'));
 
     for (var a = 0; a < parsed.length; a++) {
         if (parsed[a]['Instagram'] != "") parsed[a]['Instagram'] = normalizeURLs(parsed[a]['Instagram']);
@@ -50,7 +50,7 @@ app.get('/fff/v1/search/:parameter/:value', async function (req, res, next) {
     var value = req.params.value;
 
     var filtered = [];
-    var parsed = await csv().fromStream(request.get('http://fridaysforfuture.de/map/mapdata-29.csv'));
+    var parsed = await csv().fromStream(request.get('http://fridaysforfuture.de/map/mapdata.csv'));
 
     for (var a = 0; a < parsed.length; a++) {
         if (parsed[a]['Instagram'] != "") parsed[a]['Instagram'] = normalizeURLs(parsed[a]['Instagram']);
@@ -74,7 +74,7 @@ app.get('/fff/v2/search/:parameter/:value', async function (req, res, next) {
     var value = req.params.value;
 
     var filtered = [];
-    var parsed = await csv().fromStream(request.get('http://fridaysforfuture.de/map/mapdata-29.csv'));
+    var parsed = await csv().fromStream(request.get('http://fridaysforfuture.de/map/mapdata.csv'));
 
     for (var a = 0; a < parsed.length; a++) {
         if (parsed[a]['Instagram'] != "") parsed[a]['Instagram'] = normalizeURLs(parsed[a]['Instagram']);
