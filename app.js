@@ -4,6 +4,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const csv = require('csvtojson');
 const axios = require('axios');
+const request = require('request');
 const NodeCache = require("node-cache");
 
 const responseCache = new NodeCache({
@@ -93,7 +94,7 @@ function filterObjects(rawResult, parameter, value) {
     }
 
     for (var a = 0; a < rawResult.length; a++) {
-        if (rawResult[a][parameter].includes(value)) {
+        if (rawResult[a][parameter].toLowerCase().includes(value.toLowerCase())) {
             filteredArray.push(rawResult[a]);
         }
     }
