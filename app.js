@@ -9,8 +9,7 @@ const NodeCache = require("node-cache");
 const responseCache = new NodeCache({
     stdTTL: 600,
     checkperiod: 300,
-    deleteOnExpire: true,
-    maxKeys: 1
+    deleteOnExpire: true
 });
 
 const fffURL = "http://fridaysforfuture.de/map/mapdata.csv";
@@ -24,13 +23,16 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/fff/v2/get', async function (req, res, next) {
-    res.status(200).send(await createResponse());
+    var url = req.get('csv-url');
+
+    res.status(200).send(await createResponse(url));
 });
 
 app.get('/fff/v2/search/:parameter/:value', async function (req, res, next) {
     var parameter = req.params.parameter;
     var value = req.params.value;
-    var response = await createResponse();
+    var url = req.get('csv-url');
+    var response = await createResponse(url);
 
     response['message'] = filterObjects(response['message'], parameter, value);
 
@@ -135,8 +137,8 @@ function createNormalizedObject(rawData) {
     return normalizedArray;
 }
 
-async function createResponse() {
-    var rawCSV = await getRawCSV();
+async function createResponse(url) {
+    var rawCSV = await getRawCSV(url);
 
     if (rawCSV['success'] == 'false') {
         return {
@@ -151,13 +153,19 @@ async function createResponse() {
     }
 }
 
-async function getRawCSV() {
+async function getRawCSV(url) {
+    var requestURL = fffURL;
     var result;
-    var cache = responseCache.get("response");
+
+    if (url != null) {
+        requestURL = url;
+    }
+
+    var cache = responseCache.get("response_" + requestURL);
 
     if (cache == null) {
-        result = await axios.get(fffURL).then(res => {
-            responseCache.set("response", res['data']);
+        result = await axios.get(requestURL).then(res => {
+            responseCache.set("response_" + requestURL, res['data']);
             return {
                 success: 'true',
                 data: res['data']
